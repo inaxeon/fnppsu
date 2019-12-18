@@ -490,39 +490,39 @@ void cmd_process(sys_runstate_t *rs)
             
             if (ccmd->count > 0) {
                 int8_t tostore = -1;
-				bool ret;
+                bool ret;
 
-				if (ccmd->next_history >= CMD_MAX_HISTORY)
-					ccmd->next_history = 0;
-				else
-					ccmd->max_history++;
+                if (ccmd->next_history >= CMD_MAX_HISTORY)
+                    ccmd->next_history = 0;
+                else
+                    ccmd->max_history++;
 
-				for (i = 0; i < CMD_MAX_HISTORY; i++) {
-					if (!stricmp(ccmd->cmd_history[i], ccmd->cmd_buf)) {
-						tostore = i;
-						break;
-					}
-				}
+                for (i = 0; i < CMD_MAX_HISTORY; i++) {
+                    if (!stricmp(ccmd->cmd_history[i], ccmd->cmd_buf)) {
+                        tostore = i;
+                        break;
+                    }
+                }
 
-				if (tostore < 0) {
-					// Don't have this command in history. Store it
-					strcpy(ccmd->cmd_history[ccmd->next_history], ccmd->cmd_buf);
-					ccmd->next_history++;
-					ccmd->show_history = ccmd->next_history;
-				} else {
-					// Already have this command in history, set the 'up' arrow to retrieve it.
-					tostore++;
+                if (tostore < 0) {
+                    // Don't have this command in history. Store it
+                    strcpy(ccmd->cmd_history[ccmd->next_history], ccmd->cmd_buf);
+                    ccmd->next_history++;
+                    ccmd->show_history = ccmd->next_history;
+                } else {
+                    // Already have this command in history, set the 'up' arrow to retrieve it.
+                    tostore++;
 
-					if (tostore == CMD_MAX_HISTORY)
-						tostore = 0;
+                    if (tostore == CMD_MAX_HISTORY)
+                        tostore = 0;
 
-					ccmd->show_history = tostore;
-				}
+                    ccmd->show_history = tostore;
+                }
                 
                 ret = command_prompt_handler(rs, ccmd->cmd_buf);
 
                 if (!ret)
-					printf("Error: Command failed\r\n");
+                    printf("Error: Command failed\r\n");
             }
             
             cmd_prompt(ccmd);
@@ -643,14 +643,14 @@ void cmd_process_char(uint8_t c, uint8_t idx)
         if (c == CTL_XOFF) /* Swallow XOFF */
             return;
         
-		if (c == CTL_U) {
-			if (ccmd->count) {
-				cmd_erase_line(ccmd);
-				*(ccmd->cmd_buf) = 0;
-				ccmd->count = 0;
-			}
-			return;
-		}
+        if (c == CTL_U) {
+            if (ccmd->count) {
+                cmd_erase_line(ccmd);
+                *(ccmd->cmd_buf) = 0;
+                ccmd->count = 0;
+            }
+            return;
+        }
 
         if (c == SEQ_ESCAPE_CHAR) {
             ccmd->state = CMD_ESCAPE;
